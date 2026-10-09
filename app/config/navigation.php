@@ -154,10 +154,11 @@ function build_navigation($role, $channelType)
             array('label' => 'Compras', 'path' => '/compras/compras.php', 'icon' => 'fa-cart-flatbed'),
             array('label' => 'Nueva Compra', 'path' => '/compras/buy.php', 'icon' => 'fa-circle-plus'),
         ));
-        $addGroup('finanzas', 'Liquidaciones', array(
-            array('label' => 'Liquidación', 'path' => '/liquidaciones/liquidacion.php', 'icon' => 'fa-calculator'),
-            array('label' => 'Historial', 'path' => '/liquidaciones/liquidaciones.php', 'icon' => 'fa-clock-rotate-left'),
-        ));
+        // Oculto en Shoten de momento.
+        // $addGroup('finanzas', 'Liquidaciones', array(
+        //     array('label' => 'Liquidación', 'path' => '/liquidaciones/liquidacion.php', 'icon' => 'fa-calculator'),
+        //     array('label' => 'Historial', 'path' => '/liquidaciones/liquidaciones.php', 'icon' => 'fa-clock-rotate-left'),
+        // ));
         $addGroup('finanzas', 'Caja', array(
             array('label' => 'Movimientos de Caja', 'path' => '/turno/movimientos.php', 'icon' => 'fa-money-bill-transfer'),
         ));
