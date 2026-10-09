@@ -24,6 +24,22 @@ INSERT INTO canal (id, nombre, tipo, fechaInicio, activo, vende) VALUES
 ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), tipo = VALUES(tipo), fechaInicio = VALUES(fechaInicio),
   activo = VALUES(activo), vende = VALUES(vende);
 
+-- Cuentas. Saldo actual = saldo_inicial + movimientos (tipo_saldo: E efectivo, B banco/billetera).
+INSERT INTO cuentas (id, nombre, fecha_consolidado, saldo_inicial, saldo_consolidado, tipo, tipo_saldo, ambito_uso, activa) VALUES
+  (1, 'Efectivo',     '2026-01-01',  150000, 150000, 'A', 'E', 'COMERCIAL', 1),
+  (2, 'Mercado Pago', '2026-01-01',  480000, 480000, 'A', 'B', 'COMERCIAL', 1),
+  (3, 'Banco Demo',   '2026-01-01', 1250000, 1250000, 'A', 'B', 'COMERCIAL', 1)
+ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), fecha_consolidado = VALUES(fecha_consolidado),
+  saldo_inicial = VALUES(saldo_inicial), saldo_consolidado = VALUES(saldo_consolidado), tipo = VALUES(tipo),
+  tipo_saldo = VALUES(tipo_saldo), ambito_uso = VALUES(ambito_uso), activa = VALUES(activa);
+
+INSERT INTO medio_pago (id, nombre, cargo_porcentaje, id_cuenta, id_canal) VALUES
+  (1, 'Efectivo',       0, 1, 1),
+  (2, 'Mercado Pago',   0, 2, 1),
+  (3, 'Transferencias', 0, 3, 1)
+ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), cargo_porcentaje = VALUES(cargo_porcentaje),
+  id_cuenta = VALUES(id_cuenta), id_canal = VALUES(id_canal);
+
 INSERT INTO descuentos (id, tipo, nombre, valor, porcentaje) VALUES
   (1, 'F', 'Sin Descuento', 0, 0)
 ON DUPLICATE KEY UPDATE tipo = VALUES(tipo), nombre = VALUES(nombre), valor = VALUES(valor), porcentaje = VALUES(porcentaje);
