@@ -24,6 +24,16 @@ INSERT INTO canal (id, nombre, tipo, fechaInicio, activo, vende) VALUES
 ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), tipo = VALUES(tipo), fechaInicio = VALUES(fechaInicio),
   activo = VALUES(activo), vende = VALUES(vende);
 
+INSERT INTO descuentos (id, tipo, nombre, valor, porcentaje) VALUES
+  (1, 'F', 'Sin Descuento', 0, 0)
+ON DUPLICATE KEY UPDATE tipo = VALUES(tipo), nombre = VALUES(nombre), valor = VALUES(valor), porcentaje = VALUES(porcentaje);
+
+-- Cliente genérico: el sistema usa el id 1 fijo (POS, baja de clientes, cuentas).
+INSERT INTO clientes (id, apellido, nombre, dni, email, id_descuento, solo_contacto) VALUES
+  (1, 'Generico', 'Sin Descuento', 0, '', 1, 0)
+ON DUPLICATE KEY UPDATE apellido = VALUES(apellido), nombre = VALUES(nombre), dni = VALUES(dni), email = VALUES(email),
+  id_descuento = VALUES(id_descuento), solo_contacto = VALUES(solo_contacto);
+
 INSERT INTO empleados (id, apellido, nombre) VALUES
   (1, 'Demo', 'Administrador'),
   (2, 'Demo', 'Vendedor')
