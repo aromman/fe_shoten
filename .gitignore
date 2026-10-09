@@ -10,6 +10,8 @@ app/Integraciones/Fudo/cacert.local.pem
 
 # Certificados y claves privadas AFIP (neofactura)
 neofactura/key/
+# Tokens, tickets y logs de AFIP generados en ejecución (carpeta por CUIT)
+neofactura/[0-9]*/
 *.pem
 *.key
 *.p12
