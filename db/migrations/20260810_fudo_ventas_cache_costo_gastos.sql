@@ -1,0 +1,3 @@
+ALTER TABLE fudo_ventas_cache
+    ADD COLUMN costo DOUBLE NULL DEFAULT NULL AFTER total,
+    ADD COLUMN gastos DOUBLE NULL DEFAULT NULL AFTER costo;

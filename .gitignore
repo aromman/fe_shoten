@@ -1,0 +1,41 @@
+# Logs
+*.log
+
+# Secretos y configuración local
+app/config/secrets.local.php
+app/Integraciones/Fudo/cacert.local.pem
+.env
+.env.*
+
+# Certificados y claves privadas AFIP (neofactura)
+neofactura/key/
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Dumps de base con datos reales
+db/roi_saiko*.sql
+*.sql.gz
+*.dump
+
+# Diagnóstico PHP (no publicar en hosting)
+info.php
+php.info.php
+
+# Dependencias de desarrollo (phpunit, phpstan, etc.)
+vendor/
+
+# Archivos ajenos al proyecto
+Microsoft/
+app/models/saikono_roi.code-workspace
+
+# Entorno local / editores
+.claude/settings.local.json
+.claude/settings.json
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

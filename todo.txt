@@ -1,0 +1,48 @@
+Tareas a realizar.
+
+1 - manejo de existencias
+
+2 - importar 
+
+3 - estadisticas para oferta 
+
+4 - Separar stock de productos en estructura.
+
+5 - Ubicaciones 
+    - Elegir canal de origen y destino .
+    - y sumar atributo de canal de ubicacion 
+
+
+6 - inversion de libros 
+    + sumar atributo - dueño a stock 
+    + armar informes 
+
+8 - cuentas 
+    - crear entidad
+    - generar movimientos
+    - generar conciliacion.
+
+9 - Editoriales
+    sumar recargo.
+
+Recepcion de Compras
+
+Devoluciones
+    - producto pasa a saiko
+    - ver de generar compra o anular venta.
+
+Pagar Consignaciones
+
+Carga masiva de Compras
+
+Preventa con anticipo
+
+Movimientos de Caja
+
+Resumen para Consignaciones
+
+Cliente Gratis 
+
+Ventas sumar ajuste / descuento.
+
+Clonar producto
