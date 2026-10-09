@@ -242,7 +242,7 @@ require_once __DIR__ . '/../app/config/url.php';
                         + '<div class="col-5 text-end fw-bold">'
                         + escapeHtml(moneyFormatter.format(detail.facturacion)) + '</div></div>'
                         + '<div class="row small">'
-                        + '<div class="col-7 financial-detail-source">Comiqueria</div>'
+                        + '<div class="col-7 financial-detail-source">Librería</div>'
                         + '<div class="col-5 text-end">'
                         + escapeHtml(moneyFormatter.format(detail.facturacionLocal)) + '</div></div></div>';
                     const rows = [

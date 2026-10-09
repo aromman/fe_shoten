@@ -210,9 +210,9 @@ require_once __DIR__ . '/../app/config/url.php';
                     var html = '';
 
                     html += filaSimple('Ventas', actual.ventas, anterior.ventas, variaciones.ventas);
-                    html += filaSimple('Comiquería', actual.ventasLocal, anterior.ventasLocal, null, 'er-row-sub');
+                    html += filaSimple('Librería', actual.ventasLocal, anterior.ventasLocal, null, 'er-row-sub');
                     html += filaSimple('Costo de ventas', actual.costoVentas, anterior.costoVentas, variaciones.costoVentas);
-                    html += filaSimple('Comiquería', actual.costoVentasLocal, anterior.costoVentasLocal, null, 'er-row-sub');
+                    html += filaSimple('Librería', actual.costoVentasLocal, anterior.costoVentasLocal, null, 'er-row-sub');
                     html += filaSimple('[1] Ganancia bruta', actual.gananciaBruta, anterior.gananciaBruta, variaciones.gananciaBruta, 'er-row-total');
                     html += filaPorcentaje('Margen bruto', actual.margenBruto, anterior.margenBruto);
 
@@ -234,7 +234,7 @@ require_once __DIR__ . '/../app/config/url.php';
                         return filasHtml;
                     };
 
-                    html += filaSimple('Comiquería', actual.gastosLocal, anterior.gastosLocal, null, 'er-row-sub er-row-grupo');
+                    html += filaSimple('Librería', actual.gastosLocal, anterior.gastosLocal, null, 'er-row-sub er-row-grupo');
                     html += gastosPorGrupo(actual.gastosPorClase, anterior.gastosPorClase);
                     html += filaSimple('[2] Total gastos Operativos', actual.gastos, anterior.gastos, variaciones.gastos, 'er-row-gastos-total');
                     html += filaSimple('[3] Resultado Operativo [1] - [2]', actual.resultado, anterior.resultado, variaciones.resultado, 'er-row-total');

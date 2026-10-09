@@ -313,7 +313,7 @@ require_once __DIR__ . '/../app/config/url.php';
                             labels: labels,
                             datasets: [
                                 {
-                                    label: 'Comiqueria',
+                                    label: 'Librería',
                                     data: comiqueria,
                                     backgroundColor: 'rgba(13, 110, 253, .78)',
                                     borderColor: 'rgba(13, 110, 253, 1)',
@@ -425,7 +425,7 @@ require_once __DIR__ . '/../app/config/url.php';
                             labels: labels,
                             datasets: [
                                 {
-                                    label: 'Comiqueria',
+                                    label: 'Librería',
                                     data: comiqueria,
                                     backgroundColor: 'rgba(13, 110, 253, .78)',
                                     borderColor: 'rgba(13, 110, 253, 1)',
