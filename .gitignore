@@ -4,7 +4,6 @@
 # Secretos y configuración local
 app/config/secrets.local.php
 app/config/db.local.php
-app/Integraciones/Fudo/cacert.local.pem
 .env
 .env.*
 

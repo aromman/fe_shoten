@@ -41,7 +41,6 @@ function claseStockProducto($stock, $stockMinimo)
 
 $proveedorData = null;
 $rsProductos = array();
-$productosFudo = array('items' => array(), 'error' => '');
 
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
     and isset($_REQUEST['forwardOk']) and $_REQUEST['forwardOk']!=""){
@@ -50,15 +49,9 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
     $proveedorData = $proveedorPDO->getByIdParaCalendario($id);
 
     if (is_array($proveedorData)) {
-        $origen = isset($proveedorData['origen']) ? $proveedorData['origen'] : 'local';
-        if ($origen === 'fudo') {
-            // Sin integracion con Fudo: no hay fuente para listar productos/ingredientes de
-            // proveedores origen='fudo'. $productosFudo queda vacio (ver render mas abajo).
-        } else {
-            $rsProductos = $proveedorPDO->getAllProducts($id);
-            if (!is_array($rsProductos)) {
-                $rsProductos = array();
-            }
+        $rsProductos = $proveedorPDO->getAllProducts($id);
+        if (!is_array($rsProductos)) {
+            $rsProductos = array();
         }
     }
 }
@@ -97,12 +90,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                 color: #0f4c81;
                 background-color: #dceeff;
                 border: 1px solid #9cc7ed;
-            }
-
-            .badge-origen-fudo {
-                color: #7a4b00;
-                background-color: #ffe7b3;
-                border: 1px solid #f0bd58;
             }
         </style>
     </head>
@@ -169,9 +156,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                                     Productos e ingredientes
                                 </div>
                                 <div class="card-body">
-                                    <?php if ($origenProveedor === 'fudo' && $productosFudo['error'] !== '') { ?>
-                                        <div class="alert alert-warning"><?php echo h($productosFudo['error']); ?></div>
-                                    <?php } ?>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered" id="tbProductos">
                                             <thead>
@@ -186,19 +170,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php if ($origenProveedor === 'fudo') { ?>
-                                                    <?php foreach ($productosFudo['items'] as $item) { ?>
-                                                        <tr class="<?php echo claseStockProducto($item['stock'], $item['stockMinimo']); ?>">
-                                                            <td><?php echo h($item['nombre']); ?></td>
-                                                            <td><?php echo h($item['entidad']); ?></td>
-                                                            <td><?php echo mostrarValor($item['unidad']); ?></td>
-                                                            <td><?php echo mostrarValor($item['precio']); ?></td>
-                                                            <td><?php echo mostrarValor($item['precioCosto']); ?></td>
-                                                            <td><?php echo mostrarValor($item['stock']); ?></td>
-                                                            <td><?php echo mostrarValor($item['stockMinimo']); ?></td>
-                                                        </tr>
-                                                    <?php } ?>
-                                                <?php } else { ?>
                                                     <?php foreach ($rsProductos as $row) { ?>
                                                         <tr class="<?php echo claseStockProducto(isset($row['stock']) ? $row['stock'] : '', ''); ?>">
                                                             <td><?php echo h($row['titulo']); ?></td>
@@ -210,7 +181,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                                                             <td></td>
                                                         </tr>
                                                     <?php } ?>
-                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>

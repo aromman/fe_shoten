@@ -133,13 +133,11 @@ function build_navigation($role, $channelType)
             array('label' => 'Sorteo', 'path' => '/sorteo/sorteo.php', 'icon' => 'fa-gift'),
         ));
         $existenciasItem = array('label' => 'Existencias', 'path' => '/stock/existencias.php', 'icon' => 'fa-warehouse');
-        $faltantesFudoItem = array('label' => 'Faltantes Fudo', 'path' => '/inventario/fudo-faltantes.php', 'icon' => 'fa-boxes-packing');
         $costoMantenimientoItem = array('label' => 'Costo de Mantenimiento de Inventario', 'path' => '/stock/costo-mantenimiento.php', 'icon' => 'fa-money-bill-transfer');
         $inventarioUnificado = false;
         foreach ($sections['productos']['groups'] as &$grupoProductos) {
             if ($grupoProductos['label'] === 'Inventario') {
                 $grupoProductos['items'][] = $existenciasItem;
-                $grupoProductos['items'][] = $faltantesFudoItem;
                 $grupoProductos['items'][] = $costoMantenimientoItem;
                 $inventarioUnificado = true;
                 break;
@@ -148,7 +146,7 @@ function build_navigation($role, $channelType)
         unset($grupoProductos);
 
         if (!$inventarioUnificado) {
-            $addGroup('productos', 'Inventario', array($existenciasItem, $faltantesFudoItem, $costoMantenimientoItem));
+            $addGroup('productos', 'Inventario', array($existenciasItem, $costoMantenimientoItem));
         }
         $addGroup('compras', 'Compras', array(
             array('label' => 'Calendario', 'path' => '/proveedores/calendario.php', 'icon' => 'fa-calendar-days'),

@@ -176,10 +176,8 @@ if(!isset($_SESSION["user.loggedin"]) || $_SESSION["user.loggedin"] !== true){
 
                         proveedoresPorId[row.id] = row;
                         var origen = row.origen || 'local';
-                        var claseOrigen = origen === 'fudo' ? 'proveedor-fila-fudo' : 'proveedor-fila-local';
-                        var mensajeBorrado = origen === 'fudo'
-                            ? 'Esta seguro de querer borrar este proveedor solo de la base local? No se borrara en Fudo.'
-                            : 'Esta seguro de querer borrar este proveedor?';
+                        var claseOrigen = 'proveedor-fila-local';
+                        var mensajeBorrado = 'Esta seguro de querer borrar este proveedor?';
                         var acciones =
                             '<a href="view-proveedor.php?forwardOk=proveedores.php&id=' + row.id + '" class="text-primary"><i class="fa fa-fw fa-eye"></i></a>' +
                             '<a href="javascript:;" class="text-primary editar-proveedor" data-id="' + row.id + '"><i class="fa fa-fw fa-pencil"></i></a>' +
@@ -301,12 +299,7 @@ if(!isset($_SESSION["user.loggedin"]) || $_SESSION["user.loggedin"] !== true){
                 background-color: #f7fbff;
             }
 
-            #tb tbody tr.proveedor-fila-fudo td {
-                background-color: #fffaf0;
-            }
-
-            #tb tbody tr.proveedor-fila-local:hover td,
-            #tb tbody tr.proveedor-fila-fudo:hover td {
+            #tb tbody tr.proveedor-fila-local:hover td {
                 filter: brightness(0.98);
             }
 
@@ -318,12 +311,6 @@ if(!isset($_SESSION["user.loggedin"]) || $_SESSION["user.loggedin"] !== true){
                 color: #0f4c81;
                 background-color: #dceeff;
                 border: 1px solid #9cc7ed;
-            }
-
-            .proveedor-origen-fudo {
-                color: #7a4b00;
-                background-color: #ffe7b3;
-                border: 1px solid #f0bd58;
             }
         </style>
     </head>

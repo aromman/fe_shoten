@@ -119,21 +119,10 @@ $meses = array(1=>"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","N
                 background: #f7fbff;
             }
 
-            .calendario-evento-fudo {
-                border-left-color: #d89b1d;
-                background: #fffaf0;
-            }
-
             .badge-origen-local {
                 color: #0f4c81;
                 background-color: #dceeff;
                 border: 1px solid #9cc7ed;
-            }
-
-            .badge-origen-fudo {
-                color: #7a4b00;
-                background-color: #ffe7b3;
-                border: 1px solid #f0bd58;
             }
 
             .badge-pedido {
