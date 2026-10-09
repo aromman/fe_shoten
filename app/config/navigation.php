@@ -186,11 +186,12 @@ function build_navigation($role, $channelType)
         $addGroup('administracion', 'Locaciones', array(
             array('label' => 'Canales de Venta', 'path' => '/canales.php', 'icon' => 'fa-store'),
         ));
-        $addGroup('operaciones', 'Eventos', array(
-            array('label' => 'Calendario', 'path' => '/eventos/eventos.php', 'icon' => 'fa-calendar-days'),
-            array('label' => 'Preparar Evento', 'path' => '/eventos/preparar-evento.php', 'icon' => 'fa-list-check'),
-            array('label' => 'Finalizar Evento', 'path' => '/eventos/finalizar-evento.php', 'icon' => 'fa-flag-checkered'),
-        ));
+        // Oculto en Shoten: el módulo Eventos usa la tabla `stock`, que ya no existe.
+        // $addGroup('operaciones', 'Eventos', array(
+        //     array('label' => 'Calendario', 'path' => '/eventos/eventos.php', 'icon' => 'fa-calendar-days'),
+        //     array('label' => 'Preparar Evento', 'path' => '/eventos/preparar-evento.php', 'icon' => 'fa-list-check'),
+        //     array('label' => 'Finalizar Evento', 'path' => '/eventos/finalizar-evento.php', 'icon' => 'fa-flag-checkered'),
+        // ));
         $addGroup('finanzas', 'Costos y Deudas', array(
             array('label' => 'Costos', 'path' => '/costos.php', 'icon' => 'fa-coins'),
             array('label' => 'Inversores', 'path' => '/inversiones/inversiones.php', 'icon' => 'fa-hand-holding-dollar'),
