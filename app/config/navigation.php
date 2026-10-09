@@ -70,10 +70,11 @@ function build_navigation($role, $channelType)
             $addGroup('operaciones', 'Comiquería', array(
                 array('label' => 'Nueva Venta', 'path' => '/pos/pos.php', 'icon' => 'fa-circle-plus'),
             ));
-            $addGroup('operaciones', 'Cafetería', array(
-                array('label' => 'Cafetería', 'path' => '/cafeteria/cafeteria.php', 'icon' => 'fa-mug-hot'),
-                array('label' => 'Billeteras Mozo', 'path' => '/cafeteria/billeteras-mozo.php', 'icon' => 'fa-wallet'),
-            ));
+            // Oculto en Shoten (librería): no aplica.
+            // $addGroup('operaciones', 'Cafetería', array(
+            //     array('label' => 'Cafetería', 'path' => '/cafeteria/cafeteria.php', 'icon' => 'fa-mug-hot'),
+            //     array('label' => 'Billeteras Mozo', 'path' => '/cafeteria/billeteras-mozo.php', 'icon' => 'fa-wallet'),
+            // ));
             $addGroup('operaciones', 'Pedidos', array(
                 array('label' => 'Pedidos', 'path' => '/pedidos/pedidos.php', 'icon' => 'fa-clipboard-list'),
             ));
@@ -88,9 +89,10 @@ function build_navigation($role, $channelType)
             $addGroup('productos', 'Ofertas', array(
                 array('label' => 'Ofertas Activas', 'path' => '/ofertas/activas.php', 'icon' => 'fa-tag'),
             ));
-            $addGroup('operaciones', 'Torneos', array(
-                array('label' => 'Inscripciones', 'path' => '/torneo/inscripcion.php', 'icon' => 'fa-trophy'),
-            ));
+            // Oculto en Shoten (librería): no aplica.
+            // $addGroup('operaciones', 'Torneos', array(
+            //     array('label' => 'Inscripciones', 'path' => '/torneo/inscripcion.php', 'icon' => 'fa-trophy'),
+            // ));
         }
     }
 
