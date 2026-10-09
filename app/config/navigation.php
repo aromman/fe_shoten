@@ -67,7 +67,7 @@ function build_navigation($role, $channelType)
             $addGroup('ventas', 'Ventas', array(
                 array('label' => 'Ventas', 'path' => '/pos/ventas.php', 'icon' => 'fa-receipt'),
             ));
-            $addGroup('operaciones', 'Comiquería', array(
+            $addGroup('operaciones', 'Librería', array(
                 array('label' => 'Nueva Venta', 'path' => '/pos/pos.php', 'icon' => 'fa-circle-plus'),
             ));
             // Oculto en Shoten (librería): no aplica.
