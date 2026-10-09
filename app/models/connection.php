@@ -40,10 +40,10 @@ class Connection{
             //error_log(PHP_EOL."[".date('d.m.Y h:i:s'). " Devolviendo conexion] ", 3, "my-errors.log");      
             return self::$con;
         } else {
-            self::init();
+            return self::init();
         }
 
-    }    
+    }
 
     protected function init()
     {

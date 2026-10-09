@@ -1,11 +1,9 @@
 <?php
 error_reporting(0);
-//define('DB_NAME', 'saikono_roi'); //Your DB Name
-define('DB_NAME', 'roi_saiko'); //Your DB Name
-define('DB_USER', 'root'); //Your DB User Name
-define('DB_PASSWORD', ''); //Your DB Password
-define('DB_HOST', 'localhost'); //Your Host Name
-   
+
+// La configuración de la base vive en app/config/db.local.php.
+require_once __DIR__ . '/app/config/database.php';
+
 // Create connection
 $db     =   new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 // Check connection

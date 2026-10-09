@@ -1,8 +1,3 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'roi_saiko');
-define('DB_DRIVER', 'mysql');
-define('DB_CHARSET', 'utf8');
-?>
+// La configuración de la base vive en app/config/db.local.php.
+require_once dirname(__DIR__) . '/config/database.php';
