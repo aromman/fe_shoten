@@ -95,7 +95,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Login</title>
+        <title>Bienvenido a Shoten</title>
         <link href="css/styles.css" rel="stylesheet" />
         <script defer src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -112,8 +112,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header">
-                                        <h3 class="text-center font-weight-light my-4">Login</h3>
-                                        <h4 class="text-center font-weight-light my-4">Saiko Manga & Comic</h4>
+                                        <h3 class="text-center font-weight-light my-4">Bienvenido a Shoten</h3>
+                                        <h4 class="text-center font-weight-light my-4">Librería Demo</h4>
+                                        <table class="table table-sm table-bordered text-center mb-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Usuario</th>
+                                                    <th>Contraseña</th>
+                                                    <th>Rol</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>admin</td>
+                                                    <td>admin1234</td>
+                                                    <td>admin</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>venta</td>
+                                                    <td>venta1234</td>
+                                                    <td>vendedor</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div class="card-body">
 
@@ -125,12 +146,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
                                             <div class="form-floating mb-3 pt-2">
-                                                <label>Username</label>
+                                                <label>Usuario</label>
                                                 <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
                                                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
                                             </div>
                                             <div class="form-floating mb-3 pt-2">
-                                                <label>Password</label>
+                                                <label>Contraseña</label>
                                                 <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
                                                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
                                             </div>
