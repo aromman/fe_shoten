@@ -9,27 +9,101 @@ if(!isset($_SESSION["user.loggedin"]) || $_SESSION["user.loggedin"] !== true){
     exit;
 }
 
-// Include config file
-require_once "app/models/producto.php";
+require_once dirname(__DIR__) . "/app/models/producto.php";
+require_once dirname(__DIR__) . "/app/models/editoriales.php";
 
-$csv_data = array();
+function h($value)
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}
+
+/*
+ * Formato del CSV (con fila de encabezado):
+ * id, sku, titulo, stock, precio, editorial, serie, tomo, formato, admite_descuento, nuevo
+ * - sku "NA" = sin código: se busca por título.
+ * - editorial, serie y formato son ids.
+ */
+$columnasEsperadas = 11;
+$filas = array();
+$errorArchivo = "";
 $tipo = "";
-if ( isset($_POST["submit"]) ) {
-    $tipo = $_POST["tipo"];
-    if ( isset($_FILES["file"])) {
 
-        if ($_FILES["file"]["error"] > 0) {
-             echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
-         } else {
-            $tmpName = $_FILES["file"]["tmp_name"]; 
-            $csv_data = array_map('str_getcsv', file($tmpName));
-            // elimina encabezado
-            array_shift($csv_data);
-         }
+if (isset($_POST["submit"])) {
+    $tipo = isset($_POST["tipo"]) ? $_POST["tipo"] : "";
+
+    if (!isset($_FILES["file"]) || $_FILES["file"]["error"] === UPLOAD_ERR_NO_FILE) {
+        $errorArchivo = "Seleccioná un archivo CSV.";
+    } elseif ($_FILES["file"]["error"] !== UPLOAD_ERR_OK) {
+        $errorArchivo = "No se pudo subir el archivo (código " . (int) $_FILES["file"]["error"] . ").";
     } else {
-        echo "No file selected <br />";
+        $contenido = file_get_contents($_FILES["file"]["tmp_name"]);
+        // Quita BOM y convierte a UTF-8 si viene de Excel en Windows-1252.
+        $contenido = preg_replace('/^\xEF\xBB\xBF/', '', $contenido);
+        if (!mb_check_encoding($contenido, 'UTF-8')) {
+            $contenido = mb_convert_encoding($contenido, 'UTF-8', 'Windows-1252');
+        }
+        $lineas = preg_split('/\r\n|\r|\n/', $contenido);
+        array_shift($lineas); // encabezado
+
+        $productoPDO = new Producto();
+        $editorialPDO = new Editorial();
+        $porcentajes = array();
+
+        foreach ($lineas as $linea) {
+            if (trim($linea) === '') {
+                continue;
+            }
+            $item = array_map('trim', str_getcsv($linea));
+            $fila = array('datos' => array_pad($item, $columnasEsperadas, ''), 'estado' => '');
+
+            if (count($item) < $columnasEsperadas) {
+                $fila['estado'] = 'Error: faltan columnas';
+                $filas[] = $fila;
+                continue;
+            }
+
+            list(, $sku, $titulo, $stock, $precio, $editorial, $serie, $tomo, $formato, $admiteDescuento, $esNuevo) = $item;
+
+            $existentes = $sku !== 'NA'
+                ? $productoPDO->getAllByCriteria('sku', $sku)
+                : $productoPDO->getAllByCriteria('titulo', $titulo);
+
+            if (!empty($existentes)) {
+                $fila['estado'] = 'Ya existe';
+            } elseif ($tipo !== 'ALTA') {
+                $fila['estado'] = 'No encontrado';
+            } elseif ($titulo === '' || !is_numeric($precio) || !ctype_digit($editorial)) {
+                $fila['estado'] = 'Error: título, precio o editorial inválidos';
+            } else {
+                if (!array_key_exists($editorial, $porcentajes)) {
+                    $rsEditorial = $editorialPDO->getById($editorial);
+                    $porcentajes[$editorial] = $rsEditorial ? (float) $rsEditorial['porcentaje'] : null;
+                }
+
+                if ($porcentajes[$editorial] === null) {
+                    $fila['estado'] = 'Error: la editorial ' . $editorial . ' no existe';
+                } else {
+                    $nuevo = new Producto();
+                    $nuevo->sku = $sku;
+                    $nuevo->titulo = $titulo;
+                    $nuevo->idEditorial = (int) $editorial;
+                    $nuevo->stock = (int) $stock;
+                    $nuevo->precio = (float) $precio;
+                    $nuevo->precioCosto = round((float) $precio * (100 - $porcentajes[$editorial]) / 100);
+                    $nuevo->idSerie = ctype_digit($serie) ? (int) $serie : 1;
+                    $nuevo->tomo = (int) $tomo;
+                    $nuevo->idFormato = ctype_digit($formato) ? (int) $formato : 1;
+                    $nuevo->admiteDescuento = $admiteDescuento === '0' ? 0 : 1;
+                    $nuevo->nuevo = $esNuevo === '0' ? 0 : 1;
+                    $idNuevo = $nuevo->create();
+                    $fila['estado'] = $idNuevo ? 'Creado (id ' . $idNuevo . ')' : 'Error al crear';
+                }
+            }
+
+            $filas[] = $fila;
+        }
     }
- }
+}
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +178,14 @@ if ( isset($_POST["submit"]) ) {
                                     </div>
                                 </form>
                             </div>
-                            <div class="card-body">    
+                            <div class="card-body">
+                                <?php if ($errorArchivo !== '') { ?>
+                                    <div class="alert alert-danger"><?php echo h($errorArchivo); ?></div>
+                                <?php } ?>
+                                <p class="small text-muted mb-2">
+                                    Columnas del CSV (con encabezado): id, sku, titulo, stock, precio, editorial, serie, tomo, formato, admite_descuento, nuevo.
+                                    Editorial, serie y formato van por id. Usá "NA" como sku si el producto no tiene código.
+                                </p>
                                 <table class="table table-striped table-bordered" id="tbProductos">
                                 <thead>
                                     <tr>
@@ -117,83 +198,28 @@ if ( isset($_POST["submit"]) ) {
                                         <th class="text-center">serie</th>
                                         <th class="text-center">tomo</th>
                                         <th class="text-center">formato</th>
+                                        <th class="text-center">admite desc.</th>
                                         <th class="text-center">nuevo</th>
-                                        <th class="text-center">SQL</th>
                                         <th class="text-center">Estado</th>
                                     </tr>
-                                </thead>    
+                                </thead>
                                 <tbody>
-                                <?php 
-                                    $count_row = 0;
-                                    foreach ($csv_data as $item){
-                                        $count_row++;
-
-                                        $id = $item[0];
-                                        $sku = $item[1];
-                                        $titulo = $item[2];
-                                        $stock =  $item[3];
-                                        $precio = $item[4];
-                                        $editorial = $item[5];
-                                        $serie = $item[6];
-                                        $tomo = $item[7];
-                                        $formato = $item[8];
-                                        $admiteDescuento = $item[9];
-                                        $esNuevo = $item[10];
-
-                                        $mensaje =  "No encontrado";
-                                        // analizar si existe o no el producto
-                                        $productoPDO = new Producto();
-                                        if ($sku!="NA"){
-                                            $result = $productoPDO->getAllByCriteria('sku', $sku);
-                                        } else {
-                                            $result = $productoPDO->getAllByCriteria('titulo', $titulo);
-                                        }
-                                        if(!is_null($result)){
-                                            $mensaje = "OK";
-                                        } else {
-                                            // No encontrado 
-                                            if ($tipo == "ALTA") {
-                                                $productoPDO->sku = $sku;
-                                                $productoPDO->titulo = $titulo;
-                                                $productoPDO->idEditorial = $editorial;
-                                                $productoPDO->stock = $stock;
-                                                $productoPDO->precio = $precio;
-                                                $productoPDO->idSerie = $serie;
-                                                $productoPDO->tomo = $tomo;
-                                                $productoPDO->idFormato = $formato;
-                                                $productoPDO->nuevo = $esNuevo;
-                                                $productoPDO->create();
-                                                $mensaje = "OK";
-                                            } 
-                                        }
-                                 ?>
-
-                                <tr>
-                                    <td><?php echo $id ?></td>
-                                    <td><?php echo $sku ?></td>
-                                    <td><?php echo $titulo ?></td>
-                                    <td><?php echo $stock ?></td>
-                                    <td><?php echo $precio ?></td>
-                                    <td><?php echo $editorial ?></td>
-                                    <td><?php echo $serie ?></td>
-                                    <td><?php echo $tomo ?></td>
-                                    <td><?php echo $formato ?></td>
-                                    <td><?php echo $admiteDescuento ?></td>
-                                    <td><?php echo $esNuevo ?></td>
-                                    <td><?php echo $sql ?></td>
-                                    <td><?php echo $mensaje ?></td>
-                                </tr>
-                                <?php 
-                                        }
-                                 ?>
-                                </tbody> 
+                                <?php foreach ($filas as $fila) { ?>
+                                    <tr>
+                                        <?php foreach (array_slice($fila['datos'], 0, $columnasEsperadas) as $valor) { ?>
+                                            <td><?php echo h($valor); ?></td>
+                                        <?php } ?>
+                                        <td><?php echo h($fila['estado']); ?></td>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="12">Total Registros : <?php echo $count_row ?></td>
+                                        <td colspan="12">Total Registros : <?php echo count($filas); ?></td>
                                     </tr>
                                 </tfoot>
                                 </table>
-                            </div>   
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -203,7 +229,7 @@ if ( isset($_POST["submit"]) ) {
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src="../js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 
