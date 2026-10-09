@@ -26,14 +26,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
  
     // Check if username is empty
     if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
+        $username_err = "Ingresá tu usuario.";
     } else{
         $username = trim($_POST["username"]);
     }
     
     // Check if password is empty
     if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter your password.";
+        $password_err = "Ingresá tu contraseña.";
     } else{
         $password = trim($_POST["password"]);
     }
@@ -77,11 +77,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
             } else {
-                $login_err = "Invalid username or password.";
+                $login_err = "Usuario o contraseña incorrectos.";
             }
 
         } else {
-            $login_err = "Invalid username or password.";
+            $login_err = "Usuario o contraseña incorrectos.";
         }
     }
 }
@@ -188,8 +188,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small" href="password.php">Forgot Password?</a>
-                                                <input type="submit" class="btn btn-primary" value="Login">
+                                                <a class="small d-none" href="password.php">¿Olvidaste tu contraseña?</a>
+                                                <input type="submit" class="btn btn-primary ms-auto" value="Ingresar">
                                             </div>
                                         </form>
                                     </div>
