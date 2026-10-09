@@ -129,7 +129,7 @@ require_once "../app/models/roles.php";
                                                     <td align="center">
                                                         
                                                         <a href="update-roles.php?id=<?php echo $row['id'];?>" class="text-primary"><i class="fa fa-fw fa-pencil"></i></a>
-                                                        <a href="delete-entity.php?entityName=canal&forwardOk=roles.php&delId=<?php echo $row['id'];?>" class="text-danger" onClick="return confirm('Esta seguro de querer borrar este canal?');"><i class="fa fa-fw fa-trash"></i></a>
+                                                        <a href="../delete-entity.php?entityName=roles&forwardOk=usuarios/roles.php&delId=<?php echo $row['id'];?>" class="text-danger" onClick="return confirm('Esta seguro de querer borrar este rol?');"><i class="fa fa-fw fa-trash"></i></a>
 
                                                     </td>                            
                                                 </tr>
