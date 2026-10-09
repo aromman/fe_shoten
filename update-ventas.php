@@ -25,7 +25,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     $input_id_canal = trim($_POST["canal"]);
     $input_id_producto = trim($_POST["producto"]);
     $input_unidades = trim($_POST["unidades"]);
-    $input_id_equipo = trim($_POST["equipo"]);
     $input_id_medio_pago = trim($_POST["medioPago"]);
     $input_descuento = trim($_POST["descuento"]);
     $input_motivo_descuento = trim($_POST["motivoDescuento"]);
@@ -52,7 +51,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     $sqlUpdate = $sqlUpdate . ', total = '.$input_total;
     $sqlUpdate = $sqlUpdate . ', id_medio_pago = '.$input_id_medio_pago;
     $sqlUpdate = $sqlUpdate . ', id_cliente = '.$input_id_cliente;
-    $sqlUpdate = $sqlUpdate . ', id_equipo = '.$input_id_equipo;
     $sqlUpdate = $sqlUpdate . ' WHERE id = '.$id;
 
     //error_log(PHP_EOL.$sqlUpdate, 3, "my-errors.log");  
@@ -123,7 +121,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         $total = $valVenta["total"]; 
         $medioPago = $valVenta["id_medio_pago"]; 
         $cliente =  $valVenta["id_cliente"]; 
-        $equipo = $valVenta["id_equipo"]; 
         $ventasHeader = $valVenta["id_ventas_header"]; 
         $idDescuento = $valVenta["id_descuento"]; 
 
@@ -292,24 +289,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                                                 <?php if($val['id']==$cliente) echo 'selected="selected"'; ?>
                                                 >
                                                 <?php echo mb_strtoupper($val['apellido'] . ' '.$val['nombre'],'UTF-8')?>
-                                            </option>
-                                            <?php }?>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>Equipo</label>
-                                    <select name="equipo" id="equipo" class="form-control" data-live-search="true" data-size="10" required="required">
-                                        <option value="">Seleccione</option>
-                                        <?php
-                                            $result	=	$db->query("SELECT * FROM equipos ORDER BY equipo ASC ");
-                                            while($val  =   $result->fetch_assoc()){
-                                            ?>
-                                            <option 
-                                                value="<?php echo $val['id']?>" 
-                                                data-subtext="(<?php echo $val['id']?>)"
-                                                <?php if($val['id']==$equipo) echo 'selected="selected"'; ?>
-                                                >
-                                                <?php echo mb_strtoupper($val['equipo'],'UTF-8')?>
                                             </option>
                                             <?php }?>
                                     </select>

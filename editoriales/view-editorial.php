@@ -120,13 +120,11 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
     v.motivo_descuento motivoDescuento,
     v.total total,
     mp.nombre medioPago,
-    CONCAT (cli.apellido,' ',cli.nombre)  cliente,
-    e.equipo equipo
-    from ventas v, canal c, productos p, clientes cli, equipos e, medio_pago mp
+    CONCAT (cli.apellido,' ',cli.nombre)  cliente
+    from ventas v, canal c, productos p, clientes cli, medio_pago mp
     where v.id_canal = c.id
     and p.id = v.id_producto
     and cli.id = v.id_cliente 
-    and v.id_equipo = e.id
     and mp.id = v.id_medio_pago
     and p.id_editorial = " . $id ."
     order by 2,3,4"; 
@@ -439,7 +437,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                                             <th class="text-center">Total</th>
                                             <th class="text-center">Medio Pago</th>
                                             <th class="text-center">Cliente</th>
-                                            <th class="text-center">Equipo</th>                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -459,7 +456,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                                                     $colTotal = number_format($row['total'], 2, ".", ""); 
                                                     $colMedioPago = $row['medioPago'];
                                                     $colCliente = $row['cliente'];
-                                                    $colEquipo = $row['equipo'];
                                             
                                         ?>
 
@@ -474,7 +470,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))
                                                     <td align="right"><?php echo $colTotal; ?></td>
                                                     <td><?php echo $colMedioPago; ?></td>
                                                     <td><?php echo $colCliente; ?></td>
-                                                    <td><?php echo $colEquipo; ?></td>
                                                 </tr>
                                         <?php
                                                 }

@@ -652,11 +652,10 @@ class Producto extends Crud
                 'v' tipo_movimiento,
                 v.unidades unidades,
                 v.precio_unitario precio
-                from ventas v, canal c, productos p, clientes cli, equipos e, medio_pago mp
+                from ventas v, canal c, productos p, clientes cli, medio_pago mp
                 where v.id_canal = c.id
                 and p.id = v.id_producto
-                and cli.id = v.id_cliente 
-                and v.id_equipo = e.id
+                and cli.id = v.id_cliente
                 and mp.id = v.id_medio_pago
                 and p.id = :idVenta
                 union

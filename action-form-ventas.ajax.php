@@ -5,7 +5,6 @@ require_once "app/models/canal.php";
 require_once "app/models/clientes.php";
 require_once "app/models/medioPago.php";
 require_once "app/models/producto.php";
-require_once "app/models/equipo.php";
 
 if(isset($_REQUEST['action']) and $_REQUEST['action']=="addDataRowVentas"){
     ?>
@@ -72,18 +71,6 @@ if(isset($_REQUEST['action']) and $_REQUEST['action']=="addDataRowVentas"){
                 <?php }?>
             </select>
         </td>
-        <td>
-            <select name="equipo[]" id="equipo" class="form-control selectpicker" data-live-search="true" data-size="10" required="required">
-                <option value="">Seleccione</option>
-                <?php
-                    $equipoPDO = new Equipo();
-                    $equipos = $equipoPDO->getAll("equipo ASC");
-                    foreach ($equipos as $val) {
-                ?>
-                    <option value="<?php echo $val['id']?>" data-subtext="(<?php echo $val['id']?>)"><?php echo mb_strtoupper($val['equipo'],'UTF-8')?></option>
-                <?php }?>
-            </select>
-        </td>
         <td align="center">
             <a class="text-danger" onClick="if(confirm('Esta seguro de querer borrar esta venta?')){$(this).closest('tr').remove();}"><i class="fa fa-fw fa-trash"></i></a>
         </td>
@@ -103,7 +90,6 @@ if(isset($_REQUEST['action']) and $_REQUEST['action']=="saveVentasAddMore"){
         $ventaPDO->idCanal = $canal[$key];
         $ventaPDO->idProducto = $producto[$key];
         $ventaPDO->unidades = $unidades[$key];
-        $ventaPDO->idEquipo = $equipo[$key];
         $ventaPDO->idMedioPago = $medioPago[$key];
         $ventaPDO->descuento = $descuento[$key];
         $ventaPDO->motivoDescuento = $motivoDescuento[$key];

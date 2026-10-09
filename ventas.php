@@ -26,13 +26,11 @@ v.id_producto,
 v.total total,
 mp.nombre medioPago,
 CONCAT (cli.apellido,' ',cli.nombre)  cliente,
-e.equipo equipo,
 ps.nombre serie
-from ventas v, canal c, productos p, clientes cli, equipos e, medio_pago mp, productos_serie ps
+from ventas v, canal c, productos p, clientes cli, medio_pago mp, productos_serie ps
 where v.id_canal = c.id
 and p.id = v.id_producto
 and cli.id = v.id_cliente 
-and v.id_equipo = e.id
 and mp.id = v.id_medio_pago
 and p.id_serie = ps.id
 order by v.fecha desc, c.nombre, p.titulo"; 
@@ -151,7 +149,6 @@ $result = mysqli_query($link,$sql);
                                             <th class="text-center">Total</th>
                                             <th class="text-center">Medio Pago</th>
                                             <th class="text-center">Cliente</th>
-                                            <th class="text-center">Equipo</th>                                            
                                             <th class="text-center">Acciones</th>
                                         </tr>
                                     </thead>
@@ -171,7 +168,6 @@ $result = mysqli_query($link,$sql);
                                                     $colTotal = number_format($row['total'], 2, ".", ""); 
                                                     $colMedioPago = $row['medioPago'];
                                                     $colCliente = $row['cliente'];
-                                                    $colEquipo = $row['equipo'];
                                                     $colSerie = $row['serie'];
                                             
                                         ?>
@@ -191,7 +187,6 @@ $result = mysqli_query($link,$sql);
                                                     <td align="right"><?php echo $colTotal; ?></td>
                                                     <td><?php echo $colMedioPago; ?></td>
                                                     <td><?php echo $colCliente; ?></td>
-                                                    <td><?php echo $colEquipo; ?></td>
                                                     
                                                     <td align="center">
                                                         <a href="update-ventas.php?id=<?php echo $row['id'];?>" class="text-primary"><i class="fa fa-fw fa-pencil"></i></a>

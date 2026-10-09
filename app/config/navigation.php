@@ -200,8 +200,9 @@ function build_navigation($role, $channelType)
             array('label' => 'Empleados', 'path' => '/empleados/empleados.php', 'icon' => 'fa-id-badge'),
             array('label' => 'Pagos', 'path' => '/empleados/pagos.php', 'icon' => 'fa-money-check-dollar'),
             array('label' => 'Salarios', 'path' => '/maestros/salarios.php', 'icon' => 'fa-sack-dollar'),
-            array('label' => 'Equipos', 'path' => '/maestros/equipos.php', 'icon' => 'fa-people-group'),
-            array('label' => 'Integrantes de Equipo', 'path' => '/maestros/equipo-empleado.php', 'icon' => 'fa-user-group'),
+            // Equipos: ocultos en Shoten (no se usan).
+            // array('label' => 'Equipos', 'path' => '/maestros/equipos.php', 'icon' => 'fa-people-group'),
+            // array('label' => 'Integrantes de Equipo', 'path' => '/maestros/equipo-empleado.php', 'icon' => 'fa-user-group'),
         ));
         $addGroup('personal', 'Cuentas', array(
             array('label' => 'Cuentas', 'path' => '/cuentas/cuentas-empleados.php', 'icon' => 'fa-building-columns'),

@@ -28,7 +28,7 @@ class Ventas extends Crud {
 
   public function create(){
     try{
-      $sql = "INSERT INTO ".self::TABLE." (fecha, total, id_canal, id_producto, unidades, id_equipo, id_medio_pago, descuento, motivo_descuento, id_cliente, precio_unitario) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+      $sql = "INSERT INTO ".self::TABLE." (fecha, total, id_canal, id_producto, unidades, id_medio_pago, descuento, motivo_descuento, id_cliente, precio_unitario) VALUES (?,?,?,?,?,?,?,?,?,?)";
       $stm=$this->pdo->prepare($sql);
       $stm->execute(array(
         $this->fecha,
@@ -36,7 +36,6 @@ class Ventas extends Crud {
         $this->idCanal,
         $this->idProducto,
         $this->unidades,
-        $this->idEquipo,
         $this->idMedioPago,
         $this->descuento,
         $this->motivoDescuento,
@@ -383,12 +382,12 @@ public function getAllMonthGrouByDay(){
         }
         $totalItem = $subTotalItem - $item_descuento;
 
-        $sql[] = '('.$header.',"'.$fecha.'",'.$totalItem.','.$canal.','.$id_producto.','.$cantidadItem.',1,'.$medioPago.','.$cliente.','.$precioItem.','.$item_descuento.','.$costoItem.')';
+        $sql[] = '('.$header.',"'.$fecha.'",'.$totalItem.','.$canal.','.$id_producto.','.$cantidadItem.','.$medioPago.','.$cliente.','.$precioItem.','.$item_descuento.','.$costoItem.')';
       }
       
       if ($hayRegistros){
         $this->pdo->beginTransaction();  
-        $sqlInsert = 'INSERT INTO ventas (id_ventas_header, fecha, total, id_canal, id_producto, unidades, id_equipo, id_medio_pago, id_cliente, precio_unitario, descuento, costo) values '.implode(',', $sql);
+        $sqlInsert = 'INSERT INTO ventas (id_ventas_header, fecha, total, id_canal, id_producto, unidades, id_medio_pago, id_cliente, precio_unitario, descuento, costo) values '.implode(',', $sql);
         $stm = $this->pdo->prepare($sqlInsert);
         $stm->execute();
         $this->pdo->commit();

@@ -49,15 +49,14 @@ if(isset($_REQUEST['id']) and $_REQUEST['id']!=""
 
     // ventas detalle
     error_log(PHP_EOL.'Detalle =====> ', 3, "my-errors.log");   
-    $sqlInsert = 'INSERT INTO ventas (id_ventas_header, fecha, total, id_canal, id_producto, unidades, id_equipo, id_medio_pago, id_cliente, precio_unitario, descuento, costo) 
+    $sqlInsert = 'INSERT INTO ventas (id_ventas_header, fecha, total, id_canal, id_producto, unidades, id_medio_pago, id_cliente, precio_unitario, descuento, costo)
       select 
         '.$id_header.',
         c.fechaFin fecha,
         s.precio total, 
         s.id_canal,
         s.id_producto,
-        1 cantidad, 
-        1 id_equipo, 
+        1 cantidad,
         '.$id_pago.' id_medio_pago, 
         1 id_cliente,
         s.precio precio,
