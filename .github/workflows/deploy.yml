@@ -1,0 +1,76 @@
+name: Deploy fe_shoten
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # Corre los scripts de base contra una base vacía, dos veces, para
+  # asegurar que se pueden aplicar de cero y que son idempotentes.
+  db-check:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: shoten_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint PHP syntax
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 php -l
+
+      - name: Apply DB scripts on empty database
+        run: |
+          cat > "$RUNNER_TEMP/db.php" <<'EOF'
+          <?php
+          return array('host' => '127.0.0.1', 'name' => 'shoten_ci', 'user' => 'root',
+              'pass' => 'root', 'driver' => 'mysql', 'charset' => 'utf8');
+          EOF
+          php db/migrate.php --config="$RUNNER_TEMP/db.php"
+          php db/migrate.php --config="$RUNNER_TEMP/db.php"
+
+  deploy:
+    needs: db-check
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-fe-shoten
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ vars.FTP_REMOTE_DIR || '/app.shoten.com.ar/' }}
+          protocol: ftps
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.claude/**
+            **/README.md
+            **/*.code-workspace
+            app/config/db.local.php
+            tests/**
+
+      # Las migraciones las aplica un cron job en el hosting, corriendo
+      # db/migrate.php por CLI. El hosting bloquea el tráfico entrante desde
+      # las IPs de GitHub Actions, así que no se intenta dispararlas desde acá
+      # (en rad, los intentos llegaron a hacer que el firewall cortara el FTP).
