@@ -17,6 +17,8 @@
  *    Cada seed corre cuando su contenido cambia (se registra su hash en
  *    schema_migrations), no en cada pasada: seed_demo pisa stock, precios
  *    y contraseñas de los registros demo, y el cron los resetearía.
+ * 4. Usuarios demo (admin y venta): si alguien les cambió la contraseña,
+ *    la vuelve a la que muestra login.php. Esto sí se revisa en cada pasada.
  *
  * Es seguro correrlo muchas veces: si no hay nada pendiente no imprime nada,
  * así el cron no manda mails vacíos. Sale con código 1 si algo falla.
@@ -185,6 +187,21 @@ try {
         runSqlFile($pdo, $file);
         markApplied($pdo, $version);
         $log[] = "seed aplicado: $version";
+    }
+
+    // Los usuarios demo tienen que poder entrar siempre con la contraseña que
+    // muestra login.php, aunque un tester la cambie.
+    $demoPasswords = array('admin' => 'admin1234', 'venta' => 'venta1234');
+    $findUser = $pdo->prepare('SELECT id, password FROM users WHERE username = :username');
+    $resetPassword = $pdo->prepare('UPDATE users SET password = :password WHERE id = :id');
+    foreach ($demoPasswords as $username => $password) {
+        $findUser->execute(array(':username' => $username));
+        foreach ($findUser->fetchAll(PDO::FETCH_ASSOC) as $user) {
+            if (!password_verify($password, $user['password'])) {
+                $resetPassword->execute(array(':password' => password_hash($password, PASSWORD_DEFAULT), ':id' => $user['id']));
+                $log[] = "contraseña restaurada: $username";
+            }
+        }
     }
 
     foreach ($log as $line) {
