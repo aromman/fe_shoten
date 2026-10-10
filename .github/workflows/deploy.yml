@@ -51,9 +51,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via FTPS
+      # FTPS con reintentos: el servidor a veces corta la conexión a mitad
+      # de la subida ("Server sent FIN packet unexpectedly"). Un intento más
+      # 3 reintentos, con 2 segundos de espera antes de cada uno. La action
+      # guarda su estado en el servidor recién al terminar, así que si corta
+      # a mitad, el reintento vuelve a subir todo.
+      - name: Deploy via FTPS (intento 1)
+        id: ftp1
+        continue-on-error: true
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-        with:
+        with: &ftp-config
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
@@ -71,6 +78,38 @@ jobs:
             **/*.code-workspace
             app/config/db.local.php
             tests/**
+
+      - name: Esperar antes de reintentar
+        if: steps.ftp1.outcome == 'failure'
+        run: sleep 2
+
+      - name: Deploy via FTPS (reintento 1)
+        id: ftp2
+        if: steps.ftp1.outcome == 'failure'
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with: *ftp-config
+
+      - name: Esperar antes de reintentar
+        if: steps.ftp2.outcome == 'failure'
+        run: sleep 2
+
+      - name: Deploy via FTPS (reintento 2)
+        id: ftp3
+        if: steps.ftp2.outcome == 'failure'
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with: *ftp-config
+
+      - name: Esperar antes de reintentar
+        if: steps.ftp3.outcome == 'failure'
+        run: sleep 2
+
+      # Último intento: sin continue-on-error, si falla el job queda en rojo.
+      - name: Deploy via FTPS (reintento 3)
+        if: steps.ftp3.outcome == 'failure'
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with: *ftp-config
 
       # Las migraciones las aplica un cron job en el hosting, corriendo
       # db/migrate.php por CLI. El hosting bloquea el tráfico entrante desde
