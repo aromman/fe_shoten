@@ -59,6 +59,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ vars.FTP_REMOTE_DIR || '/app.shoten.com.ar/' }}
           protocol: ftps
+          timeout: 120000
+          log-level: verbose
           dangerous-clean-slate: false
           exclude: |
             **/.git*
